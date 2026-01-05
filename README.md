@@ -33,12 +33,13 @@ O projeto possui uma interface pública para visualização dos dados e uma inte
 
 ## Estrutura do Projeto
 
+```
 /
-├── index.html # Interface pública (somente leitura)
-├── admin.html # Painel administrativo
-├── dados.json # Base de dados dos números
+├── index.html
+├── admin.html
+├── dados.json
 └── README.md
-
+```
 
 ---
 
