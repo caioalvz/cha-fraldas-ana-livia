@@ -3,18 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chá de Fraldas - Ana Lívia</title>
+<title>Admin – Chá de Fraldas Ana Lívia</title>
 
 <style>
-  * {
-    box-sizing: border-box;
-  }
+  * { box-sizing: border-box; }
 
   body {
     margin: 0;
     font-family: Arial, sans-serif;
     background: #f4f4f4;
     padding: 12px;
+  }
+
+  .app {
+    max-width: 420px;
+    margin: auto;
   }
 
   h1 {
@@ -30,22 +33,20 @@
     margin-bottom: 15px;
   }
 
-  /* GRID DOS NÚMEROS */
   .grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 8px;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
   }
 
   .number {
-    background: #ffffff;
+    background: #fff;
     border: 1px solid #ccc;
     padding: 14px 0;
     text-align: center;
     border-radius: 8px;
     font-weight: bold;
-    font-size: 16px;
     cursor: pointer;
   }
 
@@ -54,29 +55,20 @@
     border-color: #4aa3c7;
   }
 
-  /* DETALHES */
-  .details {
-    background: #ffffff;
+  .details, .export {
+    background: #fff;
     padding: 12px;
     border-radius: 8px;
     border: 1px solid #ccc;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
     font-size: 14px;
   }
 
-  /* FORMULÁRIO */
   form {
-    background: #ffffff;
+    background: #fff;
     padding: 15px;
     border-radius: 8px;
     border: 1px solid #ccc;
-  }
-
-  form h2 {
-    font-size: 18px;
-    margin-top: 0;
-    margin-bottom: 10px;
-    text-align: center;
   }
 
   label {
@@ -107,110 +99,73 @@
     cursor: pointer;
   }
 
-  button[type="submit"] {
-    background: #4aa3c7;
-    color: #fff;
+  button.save { background: #4aa3c7; color: #fff; }
+  button.remove { background: #e74c3c; color: #fff; }
+  button.exportBtn { background: #27ae60; color: #fff; width: 100%; margin-top: 10px; }
+
+  textarea {
+    width: 100%;
+    height: 200px;
+    font-size: 12px;
   }
 
-  button[type="button"] {
-    background: #e74c3c;
-    color: #fff;
-  }
-
-  /* AJUSTE PARA TELAS MAIORES */
   @media (min-width: 768px) {
-    .grid {
-      grid-template-columns: repeat(10, 1fr);
-    }
+    .grid { grid-template-columns: repeat(10, 1fr); }
   }
 </style>
 </head>
 
 <body>
+<div class="app">
 
-<h1>Chá de Fraldas da Ana Lívia</h1>
+<h1>Admin – Chá de Fraldas 🐝</h1>
 <p class="instructions">
-  Toque em um número para ver ou editar.<br>
-  Use o formulário para cadastrar ou remover.
+  Clique em um número para editar.<br>
+  Ao final, gere o novo JSON e substitua o arquivo no GitHub.
 </p>
 
 <div class="grid" id="grid"></div>
 
-<div class="details" id="details">
+<div class="details">
   <strong>Selecionado:</strong>
   <span id="detailText">Nenhum</span>
 </div>
 
 <form id="form">
-  <h2>Cadastro / Edição</h2>
-
-  <label>Número (1 a 100)</label>
+  <label>Número</label>
   <input type="number" id="numberInput" min="1" max="100" required>
 
   <label>Nome</label>
-  <input type="text" id="nameInput" placeholder="Nome da pessoa">
+  <input type="text" id="nameInput">
 
-  <label>Fralda (P, M ou G)</label>
-  <input type="text" id="sizeInput" placeholder="Ex: P, M ou G">
+  <label>Fralda</label>
+  <input type="text" id="sizeInput" placeholder="P, M ou G">
 
   <div class="actions">
-    <button type="submit">Salvar</button>
-    <button type="button" onclick="removeEntry()">Remover</button>
+    <button class="save" type="submit">Salvar</button>
+    <button class="remove" type="button" onclick="removeEntry()">Remover</button>
   </div>
 </form>
 
+<div class="export">
+  <button class="exportBtn" onclick="exportJSON()">Gerar dados.json</button>
+  <textarea id="jsonOutput" placeholder="O JSON atualizado aparecerá aqui"></textarea>
+</div>
+
+</div>
+
 <script>
-const data = {
-  1:{name:"Graça",size:"P"},
-  2:{name:"Naide",size:"P"},
-  3:{name:"Carminha",size:"P"},
-  4:{name:"Rafa / Linda",size:"P / P"},
-  5:{name:"Aline",size:"P"},
-  6:{name:"Rosa (madrinha)",size:"P"},
-  7:{name:"Aline",size:"P"},
-  8:{name:"Rosa (madrinha)",size:"P"},
-  9:{name:"Tânia",size:"P"},
-  10:{name:"Lila",size:"P"},
-  11:{name:"Linda",size:"P"},
-  12:{name:"Bruna",size:"P"},
-  13:{name:"Edinha",size:"P"},
-  14:{name:"Paula / Ninha",size:"P / P"},
-  15:{name:"Cristina",size:"P"},
-  16:{name:"Adriana / Aline",size:"M / M"},
-  17:{name:"Kal",size:"M"},
-  18:{name:"Camilla",size:"M"},
-  19:{name:"Laura",size:"M"},
-  20:{name:"Jó",size:"M"},
-  21:{name:"Laura",size:"M"},
-  22:{name:"Rosemeire",size:"M"},
-  23:{name:"Tânia",size:"M"},
-  24:{name:"Marcela",size:"M"},
-  25:{name:"Rosa (mãe de André)",size:"M"},
-  27:{name:"Nicole laços",size:"M"},
-  29:{name:"Rafael",size:"M"},
-  30:{name:"Amanda",size:"M"},
-  35:{name:"Kekinha",size:"M"},
-  36:{name:"Alice",size:"M"},
-  38:{name:"Marcela",size:"M"},
-  40:{name:"Natália",size:"M"},
-  41:{name:"Nora",size:"M"},
-  42:{name:"Pedro / Alice",size:"M / M"},
-  49:{name:"Willame",size:"M"},
-  50:{name:"Jane",size:"M"},
-  54:{name:"Linda",size:"M"},
-  57:{name:"João",size:"G"},
-  60:{name:"Edmilson",size:"G"},
-  66:{name:"Samanta",size:"G"},
-  75:{name:"Linda",size:"G"},
-  76:{name:"Galego (queijo)",size:"G"},
-  77:{name:"Camilla",size:"G"},
-  87:{name:"Juliana",size:"G"},
-  95:{name:"Rayllane",size:"G"},
-  100:{name:"Bianka",size:"G"}
-};
+let data = {};
 
 const grid = document.getElementById("grid");
 const details = document.getElementById("detailText");
+
+fetch("dados.json")
+  .then(res => res.json())
+  .then(json => {
+    data = json;
+    renderGrid();
+  });
 
 function renderGrid(){
   grid.innerHTML="";
@@ -229,7 +184,7 @@ function selectNumber(num){
     numberInput.value=num;
     nameInput.value=data[num].name;
     sizeInput.value=data[num].size;
-  }else{
+  } else {
     details.textContent=`${num} - disponível`;
     numberInput.value=num;
     nameInput.value="";
@@ -256,7 +211,13 @@ function removeEntry(){
   }
 }
 
-renderGrid();
+function exportJSON(){
+  const ordered = {};
+  Object.keys(data).sort((a,b)=>a-b).forEach(k=>{
+    ordered[k]=data[k];
+  });
+  jsonOutput.value = JSON.stringify(ordered, null, 2);
+}
 </script>
 
 </body>
