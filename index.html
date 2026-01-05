@@ -1,156 +1,194 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chá de Fraldas da Ana Lívia</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chá de Fraldas – Ana Lívia 🐝</title>
 
-<style>
-:root{
-  --yellow:#FFF1B8;
-  --yellow-strong:#FFD84D;
-  --honey:#FFB703;
-  --brown:#6B4E16;
-  --white:#fff;
-}
+  <style>
+    :root {
+      --yellow: #fff2b3;
+      --yellow-dark: #f5c542;
+      --brown: #6b4f1d;
+      --cream: #fffbee;
+      --shadow: rgba(0,0,0,.12);
+    }
 
-body{
-  margin:0;
-  padding:16px;
-  font-family:Arial, sans-serif;
-  background:linear-gradient(#fffbee,#fff);
-  color:var(--brown);
-}
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
 
-h1{
-  text-align:center;
-  font-size:22px;
-}
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, var(--yellow), var(--cream));
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+      color: var(--brown);
+    }
 
-.instructions{
-  text-align:center;
-  font-size:14px;
-  margin-bottom:18px;
-}
+    /* CONTAINER PRINCIPAL */
+    .app {
+      width: 100%;
+      max-width: 350px; /* SIMULA TELA DE CELULAR NO PC */
+      background: var(--cream);
+      border-radius: 18px;
+      box-shadow: 0 10px 30px var(--shadow);
+      padding: 16px;
+    }
 
-/* GRID */
-.grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:14px;
-}
+    @media (min-width: 600px) {
+      .app {
+        max-width: 420px; /* tablets */
+      }
+    }
 
-/* BALÕES */
-.balloon{
-  aspect-ratio:1/1;
-  border-radius:50%;
-  background:var(--yellow);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:bold;
-  cursor:pointer;
-  box-shadow:0 6px 0 var(--yellow-strong);
-  position:relative;
-}
+    header {
+      text-align: center;
+      margin-bottom: 12px;
+    }
 
-.balloon.filled{
-  background:linear-gradient(145deg,#FFE27A,#FFD84D);
-  box-shadow:0 6px 0 var(--honey);
-}
+    header h1 {
+      font-size: 1.2rem;
+      margin: 0;
+    }
 
-/* TOOLTIP */
-.tooltip{
-  position:fixed;
-  background:var(--white);
-  border:2px solid var(--yellow-strong);
-  border-radius:10px;
-  padding:8px 10px;
-  font-size:13px;
-  box-shadow:0 4px 10px rgba(0,0,0,.15);
-  pointer-events:none;
-  opacity:0;
-  transition:opacity .15s;
-  z-index:999;
-  max-width:220px;
-}
+    header p {
+      font-size: 0.85rem;
+      margin: 6px 0 0;
+      opacity: 0.85;
+    }
 
-.tooltip strong{
-  display:block;
-  margin-bottom:2px;
-}
+    /* GRID DE BALÕES */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
 
-/* RESPONSIVO */
-@media(min-width:768px){
-  .grid{ grid-template-columns:repeat(8,1fr); }
-  h1{ font-size:26px; }
-}
-</style>
+    .balloon {
+      background: var(--yellow-dark);
+      border-radius: 50%;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      cursor: pointer;
+      position: relative;
+      transition: transform .15s ease, box-shadow .15s ease;
+      box-shadow: 0 4px 10px var(--shadow);
+      user-select: none;
+    }
+
+    .balloon:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 18px var(--shadow);
+    }
+
+    .balloon.empty {
+      background: #e6e6e6;
+      color: #aaa;
+      cursor: default;
+    }
+
+    /* TOOLTIP */
+    .tooltip {
+      position: fixed;
+      background: white;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 0.85rem;
+      box-shadow: 0 8px 20px rgba(0,0,0,.2);
+      pointer-events: none;
+      opacity: 0;
+      transform: translate(-50%, -10px);
+      transition: opacity .15s ease;
+      z-index: 1000;
+      white-space: nowrap;
+    }
+
+    .tooltip strong {
+      display: block;
+      font-size: 0.9rem;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.7rem;
+      margin-top: 16px;
+      opacity: 0.6;
+    }
+  </style>
 </head>
 
 <body>
+  <div class="app">
+    <header>
+      <h1>🐝 Chá de Fraldas – Ana Lívia</h1>
+      <p>Toque ou passe o mouse sobre um número para ver quem escolheu.</p>
+    </header>
 
-<h1>🐝 Chá de Fraldas da Ana Lívia</h1>
-<p class="instructions">
-  Passe o mouse ou toque em um balão para ver quem escolheu o número.
-</p>
+    <div class="grid" id="grid"></div>
 
-<div class="grid" id="grid"></div>
+    <footer>
+      Com carinho 💛
+    </footer>
+  </div>
 
-<div class="tooltip" id="tooltip"></div>
+  <div class="tooltip" id="tooltip"></div>
 
-<script>
-let data = {};
+  <script>
+    const grid = document.getElementById("grid");
+    const tooltip = document.getElementById("tooltip");
 
-fetch("dados.json")
-  .then(res => res.json())
-  .then(json => {
-    data = json;
-    render();
-  });
+    fetch("dados.json")
+      .then(res => res.json())
+      .then(data => {
+        for (let i = 1; i <= 100; i++) {
+          const balloon = document.createElement("div");
+          balloon.className = "balloon";
 
-const grid = document.getElementById("grid");
-const tooltip = document.getElementById("tooltip");
+          if (data[i]) {
+            balloon.textContent = i;
 
-function render(){
-  grid.innerHTML="";
-  for(let i=1;i<=100;i++){
-    const b=document.createElement("div");
-    b.className="balloon"+(data[i]?" filled":"");
-    b.textContent=i;
+            balloon.addEventListener("mousemove", e => {
+              tooltip.style.opacity = 1;
+              tooltip.style.left = e.clientX + "px";
+              tooltip.style.top = (e.clientY - 12) + "px";
+              tooltip.innerHTML = `
+                <strong>${data[i].name}</strong>
+                Fralda: ${data[i].size}
+              `;
+            });
 
-    if(data[i]){
-      b.addEventListener("mousemove", e => showTooltip(e, i));
-      b.addEventListener("mouseenter", e => showTooltip(e, i));
-      b.addEventListener("mouseleave", hideTooltip);
-      b.addEventListener("touchstart", e => {
-        showTooltip(e.touches[0], i);
+            balloon.addEventListener("mouseleave", () => {
+              tooltip.style.opacity = 0;
+            });
+
+            // Mobile (toque)
+            balloon.addEventListener("click", e => {
+              const rect = e.target.getBoundingClientRect();
+              tooltip.style.opacity = 1;
+              tooltip.style.left = rect.left + rect.width / 2 + "px";
+              tooltip.style.top = rect.top - 10 + "px";
+              tooltip.innerHTML = `
+                <strong>${data[i].name}</strong>
+                Fralda: ${data[i].size}
+              `;
+              setTimeout(() => tooltip.style.opacity = 0, 2500);
+            });
+
+          } else {
+            balloon.textContent = i;
+            balloon.classList.add("empty");
+          }
+
+          grid.appendChild(balloon);
+        }
       });
-    }
-
-    grid.appendChild(b);
-  }
-}
-
-function showTooltip(e, n){
-  const entry = data[n];
-  if(!entry) return;
-
-  tooltip.innerHTML = `
-    <strong>${n}</strong>
-    ${entry.name}<br>
-    Fralda: ${entry.size}
-  `;
-
-  tooltip.style.left = (e.clientX + 12) + "px";
-  tooltip.style.top  = (e.clientY + 12) + "px";
-  tooltip.style.opacity = 1;
-}
-
-function hideTooltip(){
-  tooltip.style.opacity = 0;
-}
-</script>
-
+  </script>
 </body>
 </html>
