@@ -1,0 +1,18 @@
+{
+  "1": { "name": "Graça", "size": "P" },
+  "2": { "name": "Naide", "size": "P" },
+  "3": { "name": "Carminha", "size": "P" },
+  "4": { "name": "Rafa / Linda", "size": "P / P" },
+  "5": { "name": "Aline", "size": "P" },
+  "6": { "name": "Rosa (madrinha)", "size": "P" },
+  "7": { "name": "Aline", "size": "P" },
+  "8": { "name": "Rosa (madrinha)", "size": "P" },
+  "9": { "name": "Tânia", "size": "P" },
+  "10": { "name": "Lila", "size": "P" },
+  "14": { "name": "Paula / Ninha", "size": "P / P" },
+  "16": { "name": "Adriana / Aline", "size": "M / M" },
+  "42": { "name": "Pedro / Alice", "size": "M / M" },
+  "57": { "name": "João", "size": "G" },
+  "75": { "name": "Linda", "size": "G" },
+  "100": { "name": "Bianka", "size": "G" }
+}

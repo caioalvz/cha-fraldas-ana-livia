@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chá de Fraldas da Ana Lívia</title>
+
+<style>
+:root{
+  --yellow:#FFF1B8;
+  --yellow-strong:#FFD84D;
+  --honey:#FFB703;
+  --brown:#6B4E16;
+  --white:#fff;
+}
+
+body{
+  margin:0;
+  padding:16px;
+  font-family:Arial, sans-serif;
+  background:linear-gradient(#fffbee,#fff);
+  color:var(--brown);
+}
+
+h1{
+  text-align:center;
+  font-size:22px;
+}
+
+.instructions{
+  text-align:center;
+  font-size:14px;
+  margin-bottom:18px;
+}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
+}
+
+/* BALÕES */
+.balloon{
+  aspect-ratio:1/1;
+  border-radius:50%;
+  background:var(--yellow);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+  cursor:pointer;
+  box-shadow:0 6px 0 var(--yellow-strong);
+  position:relative;
+}
+
+.balloon.filled{
+  background:linear-gradient(145deg,#FFE27A,#FFD84D);
+  box-shadow:0 6px 0 var(--honey);
+}
+
+/* TOOLTIP */
+.tooltip{
+  position:fixed;
+  background:var(--white);
+  border:2px solid var(--yellow-strong);
+  border-radius:10px;
+  padding:8px 10px;
+  font-size:13px;
+  box-shadow:0 4px 10px rgba(0,0,0,.15);
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .15s;
+  z-index:999;
+  max-width:220px;
+}
+
+.tooltip strong{
+  display:block;
+  margin-bottom:2px;
+}
+
+/* RESPONSIVO */
+@media(min-width:768px){
+  .grid{ grid-template-columns:repeat(8,1fr); }
+  h1{ font-size:26px; }
+}
+</style>
+</head>
+
+<body>
+
+<h1>🐝 Chá de Fraldas da Ana Lívia</h1>
+<p class="instructions">
+  Passe o mouse ou toque em um balão para ver quem escolheu o número.
+</p>
+
+<div class="grid" id="grid"></div>
+
+<div class="tooltip" id="tooltip"></div>
+
+<script>
+let data = {};
+
+fetch("dados.json")
+  .then(res => res.json())
+  .then(json => {
+    data = json;
+    render();
+  });
+
+const grid = document.getElementById("grid");
+const tooltip = document.getElementById("tooltip");
+
+function render(){
+  grid.innerHTML="";
+  for(let i=1;i<=100;i++){
+    const b=document.createElement("div");
+    b.className="balloon"+(data[i]?" filled":"");
+    b.textContent=i;
+
+    if(data[i]){
+      b.addEventListener("mousemove", e => showTooltip(e, i));
+      b.addEventListener("mouseenter", e => showTooltip(e, i));
+      b.addEventListener("mouseleave", hideTooltip);
+      b.addEventListener("touchstart", e => {
+        showTooltip(e.touches[0], i);
+      });
+    }
+
+    grid.appendChild(b);
+  }
+}
+
+function showTooltip(e, n){
+  const entry = data[n];
+  if(!entry) return;
+
+  tooltip.innerHTML = `
+    <strong>${n}</strong>
+    ${entry.name}<br>
+    Fralda: ${entry.size}
+  `;
+
+  tooltip.style.left = (e.clientX + 12) + "px";
+  tooltip.style.top  = (e.clientY + 12) + "px";
+  tooltip.style.opacity = 1;
+}
+
+function hideTooltip(){
+  tooltip.style.opacity = 0;
+}
+</script>
+
+</body>
+</html>
